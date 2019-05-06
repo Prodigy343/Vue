@@ -1,20 +1,24 @@
 <template lang='pug'>
     main.section
-        app-notification(v-show="showNotification")
-            p(slot='body') No se encontraron resultados
-        app-loader(v-show='isLoading')
+        transition(name='move')
+            app-notification(v-show="showNotification")
+                p(slot='body') No se encontraron resultados
+        transition(name='move')
+            app-loader(v-show='isLoading')
         .container(v-show='!isLoading')
             nav
                 input.input.is-large(
                     type='text'
                     placeholder='Find your song'
-                    v-model='searchQuery'
+                    v-model='searchQuery',
+                    @keyup.enter='search'
                 )
                 a.button.is-info.is-large(@click='search') Buscar
                 a.button.is-danger.is-large &times;
             .columns.is-multiline
                 .column.is-one-quarter(v-for='track in tracks')
                     app-track(
+                        v-blur='track.preview_url'
                         :track='track'
                         @select="setSelectedTrack"
                         :class="{ 'is-active' : track.id == selectedTrack }"

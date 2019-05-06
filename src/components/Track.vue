@@ -17,16 +17,17 @@
                             |   {{ track.artists[0].name }}
             .content
                 small
-                nav.level
-                    .level-left
-                        a.level-item
-                            span.icon.is-small(@click='selectTrack') ►
-                        a.level-item
-                            div.icon.is-small(@click='goToTrack(track.id)') goToTrack
+                    nav.nav
+                        .nav-menu
+                            button.nav-item.button.is-primary(class='play-btn', @click='selectTrack') ►
+                            button.nav-item.button.is-warning(@click='goToTrack(track.id)') Go
 </template>
 
 <script>
+import trackMixin from '@/mixins/track'
+
 export default {
+    mixins: [ trackMixin ],
     props: {
         track: {
             type: Object,
@@ -35,10 +36,6 @@ export default {
         }
     },
     methods: {
-        selectTrack () {
-            this.$emit('select', this.track.id)
-            this.$bus.$emit('set-track', this.track)
-        },
         goToTrack (id) {
             this.$router.push({ name: 'track', params: { id } })
         }
@@ -47,6 +44,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.play-btn{
+    margin-right: 20px;
+}
+
 .card{
     min-height: 400px;
 }
